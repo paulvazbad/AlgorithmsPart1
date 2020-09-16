@@ -1,4 +1,7 @@
+#ifndef QUICKFIND_H
+#define QUICKFIND_H
 #include <iostream>
+
 using namespace std;
 class QuickUnion
 {
@@ -37,7 +40,9 @@ int QuickUnion::root(int q)
 
 bool QuickUnion::connected(int p, int q)
 {
-    return root(q) == root(p);
+    int root_q = root(q);
+    int root_p = root(p);
+    return root_q == root_p;
 }
 
 void QuickUnion::create_union(int p, int q)
@@ -60,12 +65,4 @@ void QuickUnion::create_union(int p, int q)
     _id[root_p] = root_q;
 }
 
-int main()
-{
-    QuickUnion QF(5);
-    QF.create_union(2, 3);
-    QF.create_union(3, 1);
-    std::cout << (QF.connected(2, 1) ? "YES" : "NO") << endl;
-
-    return 0;
-}
+#endif //QUICKFIND_H
