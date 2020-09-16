@@ -1,18 +1,19 @@
 #include <iostream>
 using namespace std;
-class QuickFind
+class QuickUnion
 {
 private:
     int *_id;
     int _number_of_elements;
 
 public:
-    QuickFind(int number_of_elements);
+    QuickUnion(int number_of_elements);
     bool connected(int p, int q);
     void create_union(int p, int q);
+    int root(int);
 };
 
-QuickFind::QuickFind(int number_of_elements)
+QuickUnion::QuickUnion(int number_of_elements)
 {
     _id = new int[number_of_elements];
     for (int i = 0; i < number_of_elements; i++)
@@ -21,25 +22,29 @@ QuickFind::QuickFind(int number_of_elements)
     }
     _number_of_elements = number_of_elements;
 }
-
-bool QuickFind::connected(int p, int q)
-{
-    return _id[p] == _id[q];
+int QuickUnion::root(int q){
+    while(_id[q]!= q){
+        q = _id[q];
+    }
+    return q;
 }
 
-void QuickFind::create_union(int p, int q)
+bool QuickUnion::connected(int p, int q)
 {
-    for (int i = 0; i < _number_of_elements; i++)
-    {
-        if (_id[i] == _id[p])
-        {
-            _id[i] = _id[q];
-        }
-    }
+    return root(q) == root(p);
+}
+
+void QuickUnion::create_union(int p, int q)
+{
+    int root_p = root(p);
+    int root_q = root(q);
+    _id[root_p] = root_q; 
 }
 
 int main(){
-    QuickFind QF(5);
-    std::cout<<"Done"<<endl;
+    QuickUnion QF(5);
+    QF.create_union(2,3);
+    QF.create_union(3,1);
+    std::cout<<(QF.connected(2,1)? "YES" : "NO") <<endl;
     return 0;
 }
