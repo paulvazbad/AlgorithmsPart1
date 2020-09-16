@@ -8,6 +8,9 @@
 
 using namespace std;
 
+const int OPEN = 1;
+const int CLOSED = 0;
+
 class Percolation
 {
 private:
@@ -41,7 +44,7 @@ public:
     bool percolates();
 
     // access site (considering bounds) always closed if outside bounds
-    bool site_at();
+    int site_at(int row, int col);
 
     // print status
     void print();
@@ -60,15 +63,15 @@ Percolation::Percolation(int n) : qu((n * n) + 2), number_of_open_sites(0)
     //Initialize all the elements closed n*n matrix
     std::vector<std::vector<int>> ori(
         n,
-        std::vector<int>(n, 0));
+        std::vector<int>(n, CLOSED));
 
     matrix = ori;
 
     // Connect both virtual_top_site and virtual_bottom_site to the first and last row
     for (int i = 0; i < n; ++i)
     {
-        qu.create_union(matrix[0][i], virtual_top_site);
-        qu.create_union(matrix[n - 1][i], virtual_bottom_site);
+        qu.create_union(get_site_id(0, i), virtual_top_site);
+        qu.create_union(get_site_id(n - 1, i), virtual_bottom_site);
     }
 }
 
@@ -76,7 +79,7 @@ bool Percolation::isOpen(int row, int col)
 {
     validateCoord(row, col);
     // Open = 1, Closed = 0
-    return matrix[row][col] == 1;
+    return matrix[row][col] == OPEN;
 };
 
 void Percolation::validateCoord(int row, int col)
@@ -89,6 +92,7 @@ void Percolation::validateCoord(int row, int col)
 
 bool Percolation::isFull(int row, int col)
 {
+    validateCoord(row, col);
     // If root of this site == virtualTopSite
     return qu.connected(get_site_id(row, col), virtual_top_site);
 }
@@ -109,6 +113,59 @@ void Percolation::print()
         }
         cout << endl;
     }
+}
+
+int Percolation::numberOfOpenSites()
+{
+    return number_of_open_sites;
+}
+
+int Percolation::site_at(int row, int col)
+{
+    if (row >= matrix[0].size() || row < 0 || col >= matrix[0].size() || col < 0)
+    {
+        return 0; // Out of bound coords are considered closed
+    }
+    return matrix[row][col];
+}
+
+void Percolation::open(int row, int col)
+{
+
+    validateCoord(row, col);
+    if (isOpen(row, col))
+    {
+        return; //Already open
+    }
+    //Open site and connect to open neighbors
+    matrix[row][col] = OPEN;
+
+    int id_of_current_site = get_site_id(row, col);
+    // TOP
+    if (site_at(row - 1, col) == OPEN)
+    {
+        qu.create_union(id_of_current_site, get_site_id(row - 1, col));
+    }
+    // LEFT
+    if (site_at(row, col - 1) == OPEN)
+    {
+        qu.create_union(id_of_current_site, get_site_id(row, col - 1));
+    }
+    // RIGHT
+    if (site_at(row, col + 1) == OPEN)
+    {
+        qu.create_union(id_of_current_site, get_site_id(row, col + 1));
+    }
+    // DOWN
+    if (site_at(row + 1, col) == OPEN)
+    {
+        qu.create_union(id_of_current_site, get_site_id(row + 1, col));
+    }
+}
+
+bool Percolation::percolates()
+{
+    return qu.connected(virtual_top_site, virtual_bottom_site);
 }
 
 #endif

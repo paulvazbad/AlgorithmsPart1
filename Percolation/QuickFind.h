@@ -40,8 +40,8 @@ int QuickUnion::root(int q)
 
 bool QuickUnion::connected(int p, int q)
 {
-    int root_q = root(q);
     int root_p = root(p);
+    int root_q = root(q);
     return root_q == root_p;
 }
 
