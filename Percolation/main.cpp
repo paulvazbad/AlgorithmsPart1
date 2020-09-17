@@ -1,6 +1,7 @@
 #include <iostream>
 #include "QuickFind.h"
 #include "Percolation.h"
+#include<graphics.h>
 
 int main()
 {
