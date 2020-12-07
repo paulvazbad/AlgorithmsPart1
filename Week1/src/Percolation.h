@@ -139,6 +139,7 @@ void Percolation::open(int row, int col)
     }
     //Open site and connect to open neighbors
     matrix[row][col] = OPEN;
+    number_of_open_sites++;
 
     int id_of_current_site = get_site_id(row, col);
     // TOP

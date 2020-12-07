@@ -1,6 +1,6 @@
 #include <memory>
 #include "gtest/gtest.h"
-#include "Percolation-tests.h"
+#include "Deque-test.h"
 
 int main(int argc, char **argv)
 {
