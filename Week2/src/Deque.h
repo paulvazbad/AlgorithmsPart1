@@ -1,3 +1,6 @@
+#ifndef DEQUE_H
+#define DEQUE_H
+
 #include <iostream>
 
 using namespace std;
@@ -153,3 +156,5 @@ void Deque<T>::print()
     }
     cout << endl;
 }
+
+#endif

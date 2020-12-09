@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Deque.h"
+#include "RandomizedQueue.h"
 
 using namespace std;
 
@@ -20,5 +21,8 @@ int main()
     dq.print();
     cout<<dq.removeLast()<<endl;
     dq.print();
+
+    // RandomizedQueue
+    RandomizedQueue<int> randoq;
     return 0;
 }
